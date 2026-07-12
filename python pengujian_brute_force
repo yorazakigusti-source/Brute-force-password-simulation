@@ -1,0 +1,50 @@
+import itertools
+import time
+
+class PeretasSandi:
+    def __init__(self, himpunan_karakter):
+        self.karakter = himpunan_karakter
+
+    def serang_langsung(self, sandi_target, panjang):
+        waktu_mulai = time.time()
+        total_percobaan = 0
+        
+        # Iterasi kombinasi brute force
+        for kombinasi in itertools.product(self.karakter, repeat=panjang):
+            total_percobaan += 1
+            tebakan = ''.join(kombinasi)
+            
+            # Pencocokan string langsung
+            if tebakan == sandi_target:
+                waktu_selesai = time.time()
+                durasi = waktu_selesai - waktu_mulai
+                return tebakan, total_percobaan, durasi
+        
+        # Jika tidak ditemukan
+        waktu_selesai = time.time()
+        durasi = waktu_selesai - waktu_mulai
+        return None, total_percobaan, durasi
+
+# --- EKSEKUSI PENGUJIAN ---
+# Himpunan abjad a sampai z (26 karakter)
+himpunan_uji = "abcdefghijklmnopqrstuvwxyz"
+sistem_peretas = PeretasSandi(himpunan_uji)
+
+print("=== MULAI PENGUJIAN BRUTE FORCE ===")
+print("Skenario: Worst-Case (Sandi berada di akhir ruang pencarian)\n")
+
+# Target sandi untuk n=1 sampai n=5
+target_sandi_skenario = ["z", "zz", "zzz", "zzzz", "zzzzz"]
+
+# Melakukan perulangan otomatis untuk ke-5 skenario
+for i, target in enumerate(target_sandi_skenario):
+    n = i + 1
+    print(f"Mengeksekusi n = {n} (Target: '{target}') ...")
+    
+    hasil, jumlah_coba, waktu = sistem_peretas.serang_langsung(target, n)
+    
+    print(f"  -> Sandi Ditemukan : {hasil}")
+    print(f"  -> Total Iterasi   : {jumlah_coba:,} kali")
+    print(f"  -> Waktu Eksekusi  : {waktu:.6f} detik\n")
+
+print("=== PENGUJIAN SELESAI ===")
